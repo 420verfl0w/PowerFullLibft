@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: stales <stales@42.fr>                      +#+  +:+       +#+         #
+#    By: brda-sil <brda-sil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/29 18:23:35 by stales            #+#    #+#              #
-#    Updated: 2022/04/05 20:56:40 by stales           ###   ########.fr        #
+#    Updated: 2022/04/05 21:29:43 by brda-sil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,46 +42,60 @@ endef
 
 # **************************************************************************** #
 # config
-
-BASE_SRC		:= ft_atoi.c
-ASM_SRC			:= ft_memset.s
-OBJ				:= $(BASE_SRC:.c=.o)
-ASM_OBJ			:= $(ASM_SRC:.s=.o)
-CFLAGS			:= -Wall -Wextra -Werror -I.
+CFLAGS			:= -Wall -Wextra -Werror
 NAME			:= libft.a
 LIBSHARE		:= libft.so
+RM				:= rm -rf
 NASM			:= nasm
+CC				:= gcc
+
+# SRC
+SRC_DIR			:= src
+SRC_BASE		:= ft_atoi.c
+SRC_ASM			:= ft_memset.s
+
+SRC_BASE		:= $(patsubst %,$(SRC_DIR)/%,$(SRC_BASE))
+SRC_ASM			:= $(patsubst %,$(SRC_DIR)/%,$(SRC_ASM))
+
+# OBJ
+OBJ_DIR			:= obj
+
+OBJ_BASE		:= $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC_BASE:%.c=%.o))
+OBJ_ASM			:= $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC_ASM:%.s=%.o))
+
+# LIB DIR
+LIB_DIR			:= lib
+CFLAGS			+= -I$(LIB_DIR)
 
 # **************************************************************************** #
 
 # **************************************************************************** #
 # Building rules
 
-all:			$(NAME)
+all:			create_dir $(NAME)
 
-%.o: %.s
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	@tabs 18
 	@printf "$(font_color)[$(green)+$(font_color)] Creation of the object $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
 	@$(NASM) -f elf64 -o $@ $<
 
-%.o: %.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@tabs 18
 	@printf "$(font_color)[$(green)+$(font_color)] Creation of the object $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(NAME):		$(OBJ)
+$(NAME):		$(OBJ_BASE)
 	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)libft.a$(reset)\n"
-	@ar rcs $(NAME) $(OBJ)
+	@ar rcs $(NAME) $(OBJ_BASE)
 	$(print_ascii)
 
 so:
-	$(CC) -c -fPIC $(CFLAGS) $(BASE_SRC)
-	gcc -nostartfiles -shared -o $(LIBSHARE) $(OBJ)
+	$(CC) -c -fPIC $(CFLAGS) $(SRC_BASE)
+	gcc -nostartfiles -shared -o $(LIBSHARE) $(OBJ_BASE)
 
 clean:
 	@printf "$(font_color)[$(red)-$(font_color)] Deleting object files$(reset)\n"
-	@$(RM) $(OBJ)
-	@$(RM) $(BONUS_OBJ)
+	@$(RM) $(OBJ_DIR)
 	@$(RM) $(LIBSHARE)
 
 fclean:			clean
@@ -90,10 +104,13 @@ fclean:			clean
 
 re:				fclean $(NAME)
 
-bonus:			$(BONUS_OBJ)
-	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)libft.a$(font_color) with bonus $(reset)\n"
-	@ar rcs $(NAME) $(BONUS_OBJ)
-	$(print_ascii)
+# create OBJDIR, "-p" mean no error if already here
+create_dir :
+ifeq (,$(wildcard ./$(OBJ_DIR)))
+	@printf "[$(blue)INFO$(reset)] Creating obj dir\n$(bold)"
+	mkdir -p $(OBJ_DIR)
+	@printf "$(reset)"
+endif
 
 .PHONY:			all clean fclean re
 
