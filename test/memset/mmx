@@ -1,0 +1,25 @@
+
+vmovd  xmm0, esi // move doubleword/quadword
+
+XMM -> 128 bits register multimedia extension
+
+https://www.felixcloutier.com/x86/movd:movq
+
+v16_int8 = {0x61, 0x0 <repeats 15 times>},
+v8_int16 = {0x61, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0},
+v4_int32 = {0x61, 0x0, 0x0, 0x0},
+v2_int64 = {0x61, 0x0},
+uint128 = 0x61
+
+
+YMM -> 256 bits register Advanced vector registers
+
+ymm0           {
+  v8_float = {0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff},
+  v4_double = {0x7fffffffffffffff, 0x7fffffffffffffff, 0x7fffffffffffffff, 0x7fffffffffffffff},
+  v32_int8 = {0x61 <repeats 32 times>},
+  v16_int16 = {0x6161 <repeats 16 times>},
+  v8_int32 = {0x61616161, 0x61616161, 0x61616161, 0x61616161, 0x61616161, 0x61616161, 0x61616161, 0x61616161},
+  v4_int64 = {0x6161616161616161, 0x6161616161616161, 0x6161616161616161, 0x6161616161616161},
+  v2_int128 = {0x61616161616161616161616161616161, 0x61616161616161616161616161616161}
+}
