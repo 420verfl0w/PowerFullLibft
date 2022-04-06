@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: brda-sil <brda-sil@student.42.fr>          +#+  +:+       +#+         #
+#    By: stales <stales@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/29 18:23:35 by stales            #+#    #+#              #
-#    Updated: 2022/04/05 21:29:43 by brda-sil         ###   ########.fr        #
+#    Updated: 2022/04/06 14:37:36 by stales           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,14 +84,14 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@printf "$(font_color)[$(green)+$(font_color)] Creation of the object $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
-$(NAME):		$(OBJ_BASE)
+$(NAME):		$(OBJ_BASE) $(OBJ_ASM)
 	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)libft.a$(reset)\n"
-	@ar rcs $(NAME) $(OBJ_BASE)
+	@ar rcs $(NAME) $(OBJ_BASE) $(OBJ_ASM)
 	$(print_ascii)
 
-so:
+so: $(OBJ_ASM)
 	$(CC) -c -fPIC $(CFLAGS) $(SRC_BASE)
-	gcc -nostartfiles -shared -o $(LIBSHARE) $(OBJ_BASE)
+	gcc -nostartfiles -shared -o $(LIBSHARE) $(OBJ_BASE) $(OBJ_ASM)
 
 clean:
 	@printf "$(font_color)[$(red)-$(font_color)] Deleting object files$(reset)\n"
