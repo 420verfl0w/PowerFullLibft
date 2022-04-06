@@ -1,1 +1,4 @@
-**.o
+libft.a
+*.so
+*.a
+obj/
