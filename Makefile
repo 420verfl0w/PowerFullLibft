@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: stales <stales@42.fr>                      +#+  +:+       +#+         #
+#    By: brda-sil <brda-sil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/29 18:23:35 by stales            #+#    #+#              #
-#    Updated: 2022/04/06 14:37:36 by stales           ###   ########.fr        #
+#    Updated: 2022/04/06 15:02:36 by brda-sil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,12 +76,12 @@ all:			create_dir $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	@tabs 18
-	@printf "$(font_color)[$(green)+$(font_color)] Creation of the object $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
+	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
 	@$(NASM) -f elf64 -o $@ $<
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@tabs 18
-	@printf "$(font_color)[$(green)+$(font_color)] Creation of the object $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
+	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)$< $(blinking)$(font_color)\t-> $(reset)$(bold) $@ $(reset)\n"
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(NAME):		$(OBJ_BASE) $(OBJ_ASM)
@@ -94,7 +94,7 @@ so: $(OBJ_ASM)
 	gcc -nostartfiles -shared -o $(LIBSHARE) $(OBJ_BASE) $(OBJ_ASM)
 
 clean:
-	@printf "$(font_color)[$(red)-$(font_color)] Deleting object files$(reset)\n"
+	@printf "$(font_color)[$(red)-$(font_color)] Deleting $(bold)object folder$(reset)\n"
 	@$(RM) $(OBJ_DIR)
 	@$(RM) $(LIBSHARE)
 
@@ -102,15 +102,13 @@ fclean:			clean
 	@printf "$(font_color)[$(red)-$(font_color)] Deleting $(bold)$(NAME)$(reset)\n"
 	@$(RM) $(NAME) $(LIBSHARE)
 
-re:				fclean $(NAME)
+re:				fclean create_dir $(NAME)
 
 # create OBJDIR, "-p" mean no error if already here
-create_dir :
-ifeq (,$(wildcard ./$(OBJ_DIR)))
-	@printf "[$(blue)INFO$(reset)] Creating obj dir\n$(bold)"
-	mkdir -p $(OBJ_DIR)
+create_dir:
+	@printf "$(font_color)[$(green)+$(font_color)] Creation of $(bold)obj dir$(reset)\n"
+	@mkdir -p $(OBJ_DIR)
 	@printf "$(reset)"
-endif
 
 .PHONY:			all clean fclean re
 
