@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: brda-sil <brda-sil@student.42.fr>          +#+  +:+       +#+         #
+#    By: stales <stales@student42.fr>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/29 18:23:35 by stales            #+#    #+#              #
-#    Updated: 2022/04/06 15:02:36 by brda-sil         ###   ########.fr        #
+#    Updated: 2022/04/06 21:21:30 by stales           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ endef
 
 # **************************************************************************** #
 # config
-CFLAGS			:= -Wall -Wextra -Werror
+CFLAGS			:= -Wall -Wextra -Werror -O3
 NAME			:= libft.a
 LIBSHARE		:= libft.so
 RM				:= rm -rf
